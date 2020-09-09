@@ -57,7 +57,7 @@ type isilonCollector struct {
 }
 
 // NewIsilonCollector creates a new IsilonCollector
-func NewIsilonCollector(fqdn string, port string, uname string, pwdenv string, site string, auth bool, qOnly bool, filters ...string) (*isilonCollector, error) {
+func NewIsilonCollector(fqdn string, port string, uname string, pwdenv string, site string, auth bool, qOnly bool, fOnly bool, filters ...string) (*isilonCollector, error) {
 	if auth {
 		// Take the struct that was generated in main and use it as the configuration for connecting to the clusters.
 		IsiCluster.FQDN = fqdn
@@ -66,6 +66,7 @@ func NewIsilonCollector(fqdn string, port string, uname string, pwdenv string, s
 		IsiCluster.PasswordEnv = pwdenv
 		IsiCluster.Site = site
 		IsiCluster.QuotaOnly = qOnly
+		IsiCluster.FSAOnly = fOnly
 
 		// Get the the goisilon connector and put it into the shared IsiClusterConfig struct.
 		log.Debugf("Creating connection to the cluster endpoint %s", IsiCluster.FQDN)
@@ -121,11 +122,23 @@ func NewIsilonCollector(fqdn string, port string, uname string, pwdenv string, s
 	}
 
 	//If qOnly then set all collectors to disabled except for quotas
-	if qOnly {
+	if !fOnly && qOnly {
 		var disabled = false
 		var enabled = true
 		for key := range collectorState {
 			if key == "quota" {
+				collectorState[key] = &enabled
+			} else {
+				collectorState[key] = &disabled
+			}
+		}
+	}
+
+	if fOnly {
+		var disabled = false
+		var enabled = true
+		for key := range collectorState {
+			if key == "fsa" {
 				collectorState[key] = &enabled
 			} else {
 				collectorState[key] = &disabled

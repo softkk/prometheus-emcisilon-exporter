@@ -535,3 +535,48 @@ type IsiNodesDrives struct {
 	} `json:"nodes"`
 	Total int `json:"total"`
 }
+
+// IsiFSAResults - https://pahdpfs:8080/platform/3/fsa/results/
+type IsiFSAResults struct {
+	Results []struct {
+		BeginTime      int      `json:"begin_time" `
+		ContentPath    string   `json:"content_path" `
+		DeleteLink     string   `json:"delete_link" `
+		EndTime        int      `json:"end_time" `
+		FSAState       string   `json:"fsa_state" `
+		ID             int      `json:"id" `
+		JobState       []string `json:"job_state" `
+		Pinned         bool     `json:"pinned" `
+		PropertiesLink string   `json:"properties_link" `
+		Size           int      `json:"size" `
+		Version        int      `json:"version" `
+	} `json:"results"`
+	Total int `json:"total" `
+}
+
+// IsiUsageData -
+type IsiUsageData struct {
+	AdsCnt             float64 `json:"ads_cnt" `
+	DirCnt             float64 `json:"dir_cnt" `
+	FileCnt            float64 `json:"file_cnt" `
+	HasSubdirs         bool    `json:"has_subdirs" `
+	LIN                int     `json:"lin" `
+	LogSizeSum         float64 `json:"log_size_sum" `
+	LogSizeSumOverflow float64 `json:"log_size_sum_overflow" `
+	Name               string  `json:"name" `
+	OtherCnt           float64 `json:"other_cnt" `
+	Parent             int     `json:"parent" `
+	PhysSizeSum        float64 `json:"phys_size_sum" `
+}
+
+// IsiFSADirectories - https://pahdpfs:8080/platform/3/fsa/results/7837/directories/2
+type IsiFSADirectories struct {
+	AttributeCount int          `json:"attribute_count" `
+	BeginTime      int          `json:"begin_time" `
+	DirDepth       int          `json:"dir_depth" `
+	DirUsage       IsiUsageData `json:"dir_usage"`
+	// PathParts      []struct {
+	// } `json:"path_parts"`
+	TotalUsage IsiUsageData   `json:"total_usage"`
+	UsageData  []IsiUsageData `json:"usage_data"`
+}

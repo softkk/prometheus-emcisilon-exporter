@@ -15,6 +15,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/hpanike/goisilon"
 	"github.com/hpanike/goisilon/api"
@@ -421,4 +422,25 @@ func GetDriveInfo(c *goisilon.Client) (IsiNodesDrives, error) {
 		return resp, err
 	}
 	return resp, nil
+}
+
+// GetFSAResults -
+func GetFSAResults(c *goisilon.Client) (resp IsiFSAResults, err error) {
+	const path = "/platform/3/fsa/results"
+	err = c.API.Get(context.Background(), path, "", nil, nil, &resp)
+	if err != nil {
+		log.Warn("Unable to get FSA results.")
+	}
+	return
+}
+
+//GetFSADirectories -
+func GetFSADirectories(c *goisilon.Client, rsid int) (resp IsiFSADirectories, err error) {
+	path := "/platform/3/fsa/results/" + strconv.Itoa(rsid) + "/directories/2"
+
+	err = c.API.Get(context.Background(), path, "", nil, nil, &resp)
+	if err != nil {
+		log.Warn("Unable to get FSA results.")
+	}
+	return
 }

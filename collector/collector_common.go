@@ -13,9 +13,10 @@ package collector
 
 import (
 	"github.com/adobe/prometheus-emcisilon-exporter/isiclient"
+
+	"github.com/hpanike/goisilon"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
-	"github.com/hpanike/goisilon"
 )
 
 var (
@@ -41,6 +42,7 @@ type IsilonCluster struct {
 	PasswordEnv string
 	QuotaOnly   bool
 	Quotas      Quotas
+	FSAOnly     bool
 	Client      *goisilon.Client
 }
 

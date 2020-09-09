@@ -21,9 +21,9 @@ import (
 )
 
 type memoryCollector struct {
-	memoryUsed  *prometheus.Desc
-	memoryFree  *prometheus.Desc
-	memoryCache *prometheus.Desc
+	memoryUsed *prometheus.Desc
+	memoryFree *prometheus.Desc
+	// memoryCache *prometheus.Desc
 }
 
 func init() {
@@ -43,11 +43,11 @@ func NewMemoryCollector() (Collector, error) {
 			"RAM memory currently free in bytes.",
 			[]string{"node"}, ConstLabels,
 		),
-		memoryCache: prometheus.NewDesc(
-			prometheus.BuildFQName(namespace, nodeCollectorSubsystem, "memory_cache"),
-			"RAM memory currently used for cache in bytes.",
-			[]string{"node"}, ConstLabels,
-		),
+		// memoryCache: prometheus.NewDesc(
+		// 	prometheus.BuildFQName(namespace, nodeCollectorSubsystem, "memory_cache"),
+		// 	"RAM memory currently used for cache in bytes.",
+		// 	[]string{"node"}, ConstLabels,
+		// ),
 	}, nil
 }
 
@@ -57,7 +57,7 @@ func (c *memoryCollector) Update(ch chan<- prometheus.Metric) error {
 
 	keyMap[c.memoryUsed] = "node.memory.used"
 	keyMap[c.memoryFree] = "node.memory.free"
-	keyMap[c.memoryCache] = "node.memory.cache"
+	// keyMap[c.memoryCache] = "node.memory.cache"
 
 	for promStat, statKey := range keyMap {
 		begin := time.Now()

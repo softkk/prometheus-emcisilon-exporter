@@ -19,7 +19,16 @@ import (
 	"github.com/hpanike/goisilon"
 	"github.com/hpanike/goisilon/api"
 	"github.com/prometheus/common/log"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
+
+var (
+	timeout *string
+)
+
+func init() {
+	timeout = kingpin.Flag("isilon.timeout", "isilon connect timeout").Default("10").String()
+}
 
 // NewIsilonClient creates and isilon client from goisilon.NewClientsWithArgs.
 func NewIsilonClient(fqdn string, port string, username string, passwordEnv string) (*goisilon.Client, error) {
@@ -90,7 +99,10 @@ func QueryStatsEngineMultiVal(c *goisilon.Client, key string) (IsiMultiVal, erro
 	params = api.NewOrderedValues([][]string{
 		{"keys", key},
 		{"devid", "all"},
+		{"timeout", *timeout},
 	})
+
+	log.Infoln("timeout", *timeout)
 
 	//Query API
 	err := c.API.Get(context.Background(), path, "", params, nil, &resp)
@@ -116,6 +128,7 @@ func QueryStatsEngineSingleVal(c *goisilon.Client, key string) (IsiSingleVal, er
 	params = api.NewOrderedValues([][]string{
 		{"keys", key},
 		{"devid", "all"},
+		{"timeout", *timeout},
 	})
 
 	//Query API
@@ -252,6 +265,7 @@ func GetProtoStat(c *goisilon.Client, key string) (IsiProtoStat, error) {
 	params = api.NewOrderedValues([][]string{
 		{"keys", key},
 		{"devid", "all"},
+		{"timeout", *timeout},
 	})
 
 	//Query API

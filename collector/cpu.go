@@ -105,6 +105,8 @@ func (c *cpuCollector) Update(ch chan<- prometheus.Metric) error {
 				if strings.Contains(statKey, "cpu") {
 					if !(strings.Contains(statKey, "count")) {
 						val = stat.Value / 10
+					} else {
+						val = stat.Value
 					}
 				}
 				if strings.Contains(statKey, "load") {
